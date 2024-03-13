@@ -8,6 +8,6 @@ router.get("/", (req, res) => {
     res.send("This is the TV Programs API endpoint!")
 })
 
-router.get("/all", tvProgramController.getAllPrograms)
+router.post("/mediaset", tvProgramController.parseMediasetPrograms)
 
 module.exports = router
