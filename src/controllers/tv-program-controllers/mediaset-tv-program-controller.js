@@ -20,9 +20,9 @@ class TvProgramController {
             for (let entry of data.entries) {
                 for (let listing of entry.listings) {
                     programs.push({
-                        name: listing.mediasetlisting$epgTitle,
+                        title: listing.mediasetlisting$epgTitle,
                         description: listing?.description,
-                        id_channel: listing?.program?.mediasetprogram$publishInfo?.channel,
+                        channel_id: listing?.program?.mediasetprogram$publishInfo?.channel,
                         channel: listing?.program?.mediasetprogram$publishInfo?.description,
                         start_time: listing?.startTime,
                         end_time: listing?.endTime,
@@ -56,7 +56,7 @@ class TvProgramController {
                 req.log.info("Data service response is OK")
                 const parsed = this.#parseMediasetPrograms(response.data.data, req.log)
 
-                return res.send({data: parsed})
+                return res.send({ data: parsed })
             }
         } catch (error) {
             req.log.error(`Error getting today's programs for channel: ${error.message}`)
