@@ -11,7 +11,7 @@ router.get("/", (req, res) => {
 const tvProgramRouter = express.Router()
 tvProgramRouter.get("/get-last-update", dbController.getLastTvProgramUpdate)
 tvProgramRouter.post("/insert", dbController.insertTvProgram)
+tvProgramRouter.get("/today", dbController.getTodayTvPrograms)
 router.use("/tv-program", tvProgramRouter)
 
 module.exports = router
-
