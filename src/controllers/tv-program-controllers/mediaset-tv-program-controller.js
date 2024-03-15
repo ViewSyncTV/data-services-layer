@@ -19,14 +19,18 @@ class TvProgramController {
 
             for (let entry of data.entries) {
                 for (let listing of entry.listings) {
-                    programs.push({
-                        title: listing.mediasetlisting$epgTitle,
-                        description: listing?.description,
-                        channel_id: listing?.program?.mediasetprogram$publishInfo?.channel,
-                        channel: listing?.program?.mediasetprogram$publishInfo?.description,
-                        start_time: listing?.startTime,
-                        end_time: listing?.endTime,
-                    })
+                    try {
+                        programs.push({
+                            title: listing.mediasetlisting$epgTitle,
+                            description: listing?.description,
+                            channel_id: listing?.program?.mediasetprogram$publishInfo?.channel,
+                            channel: listing?.program?.mediasetprogram$publishInfo?.description,
+                            start_time: (new Date(listing?.startTime)).toISOString().toLocaleString("it-IT"),
+                            end_time: (new Date(listing?.endTime)).toISOString().toLocaleString("it-IT"),
+                        })
+                    } catch (error) {
+                        logger.error(`Error parsing mediaset program: ${error.message}`)
+                    }
                 }
             }
 
