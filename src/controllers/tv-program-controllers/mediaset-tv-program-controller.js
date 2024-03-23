@@ -3,7 +3,7 @@ const axios = require("axios")
 const DATA_SERVICE_URL = process.env.DATA_SERVICE_URL || "http://localhost:3040"
 const MEDIASET_TV_PROGRAMS_TODAY_GET = `${DATA_SERVICE_URL}/api/tv-program/mediaset/today`
 
-class TvProgramController {
+class MediasetTvProgramController {
     constructor() {
         this.getTodayProgramsForChannel = this.getTodayProgramsForChannel.bind(this)
     }
@@ -71,4 +71,4 @@ class TvProgramController {
     }
 }
 
-module.exports = TvProgramController
+module.exports = MediasetTvProgramController
