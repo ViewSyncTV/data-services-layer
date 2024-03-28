@@ -11,11 +11,11 @@ router.get("/", (req, res) => {
 })
 
 const mediasetRouter = express.Router()
-mediasetRouter.get("/today/:channelId", mediasetTvProgramController.getTodayProgramsForChannel)
+mediasetRouter.get("/week/:channelId", mediasetTvProgramController.getWeekProgramsForChannel)
 router.use("/mediaset", mediasetRouter)
 
 const raiRouter = express.Router()
-raiRouter.get("/today/:channelId", raiTvProgramController.getTodayProgramsForChannel)
+raiRouter.get("/week/:channelId", raiTvProgramController.getWeekProgramsForChannel)
 router.use("/rai", raiRouter)
 
 module.exports = router

@@ -5,7 +5,7 @@ const RAI_TV_PROGRAMS_TODAY_GET = `${DATA_SERVICE_URL}/api/tv-program/rai/today`
 
 class RaiTvProgramController {
     constructor() {
-        this.getTodayProgramsForChannel = this.getTodayProgramsForChannel.bind(this)
+        this.getTodayProgramsForChannel = this.getWeekProgramsForChannel.bind(this)
     }
 
     #parseDateTime(dateStr) {
@@ -77,7 +77,7 @@ class RaiTvProgramController {
         }
     }
 
-    async getTodayProgramsForChannel(req, res) {
+    async getWeekProgramsForChannel(req, res) {
         try {
             const channelId = req.params.channelId
 
