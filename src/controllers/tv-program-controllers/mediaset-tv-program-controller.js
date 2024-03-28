@@ -24,7 +24,6 @@ class MediasetTvProgramController {
                             title: listing.mediasetlisting$epgTitle,
                             description: listing?.description,
                             channel_id: listing?.program?.mediasetprogram$publishInfo?.channel,
-                            channel: listing?.program?.mediasetprogram$publishInfo?.description,
                             start_time: (new Date(listing?.startTime)).toISOString().toLocaleString("it-IT"),
                             end_time: (new Date(listing?.endTime)).toISOString().toLocaleString("it-IT"),
                         })
@@ -59,6 +58,10 @@ class MediasetTvProgramController {
             if (response.status === 200) {
                 req.log.info("Data service response is OK")
                 const parsed = this.#parseMediasetPrograms(response.data.data, req.log)
+
+                parsed.forEach((program) => {
+                    program.channel_id = channelId
+                })
 
                 return res.send({ data: parsed })
             }

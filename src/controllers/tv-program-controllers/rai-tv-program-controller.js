@@ -61,7 +61,6 @@ class RaiTvProgramController {
                         title: event?.name,
                         description: event?.description,
                         channel_id: event?.channel,
-                        channel: event?.channel,
                         start_time: startTime.toISOString().toLocaleString("it-IT"),
                         end_time: endTime.toISOString().toLocaleString("it-IT"),
                     })
@@ -95,6 +94,10 @@ class RaiTvProgramController {
             if (response.status === 200) {
                 req.log.info("Data service response is OK")
                 const parsed = this.#parseRaiPrograms(response.data.data, req.log)
+
+                parsed.forEach((program) => {
+                    program.channel_id = channelId
+                })
 
                 return res.send({ data: parsed })
             }
