@@ -17,7 +17,7 @@ class MediasetTvProgramController {
 
             let programs = []
 
-            for (let entry of data.entries) {
+            for (let entry of data) {
                 for (let listing of entry.listings) {
                     try {
                         programs.push({
@@ -62,6 +62,7 @@ class MediasetTvProgramController {
 
             if (response.status === 200) {
                 req.log.info("Data service response is OK")
+
                 const parsed = this.#parseMediasetPrograms(response.data.data, req.log)
 
                 parsed.forEach((program) => {

@@ -1,11 +1,11 @@
 const axios = require("axios")
 
 const DATA_SERVICE_URL = process.env.DATA_SERVICE_URL || "http://localhost:3040"
-const RAI_TV_PROGRAMS_TODAY_GET = `${DATA_SERVICE_URL}/api/tv-program/rai/today`
+const RAI_TV_PROGRAMS_TODAY_GET = `${DATA_SERVICE_URL}/api/tv-program/rai/week`
 
 class RaiTvProgramController {
     constructor() {
-        this.getTodayProgramsForChannel = this.getWeekProgramsForChannel.bind(this)
+        this.getWeekProgramsForChannel = this.getWeekProgramsForChannel.bind(this)
     }
 
     #parseDateTime(dateStr) {
@@ -50,8 +50,9 @@ class RaiTvProgramController {
                 logger.error("Invalid Request, no data provided")
                 return []
             }
+
             let programs = []
-            for (let event of data.events) {
+            for (let event of data) {
                 try {
                     const startTimeStr = event?.date + " " + event?.hour
                     const startTime = this.#parseDateTime(startTimeStr)
