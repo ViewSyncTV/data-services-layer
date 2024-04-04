@@ -47,36 +47,22 @@ class MediasetTvProgramController {
     }
 
     async getWeekProgramsForChannel(req, res) {
-        try {
-            const channelId = req.params.channelId
+        const channelId = req.params.channelId
 
-            if (!channelId) {
-                req.log.error("Invalid Request, no channel provided")
-                return res.status(400).send({ error: { message: "Invalid Request" } })
-            }
+        const url = `${MEDIASET_TV_PROGRAMS_WEEK_GET}/${channelId}`
+        req.log.info(`Calling data service: ${url}`)
 
-            const url = `${MEDIASET_TV_PROGRAMS_WEEK_GET}/${channelId}`
-            req.log.info(`Calling data service: ${url}`)
+        const response = await axios.get(url)
 
-            const response = await axios.get(url)
+        req.log.info("Data service response is OK")
 
-            if (response.status === 200) {
-                req.log.info("Data service response is OK")
+        const parsed = this.#parseMediasetPrograms(response.data.data, req.log)
 
-                const parsed = this.#parseMediasetPrograms(response.data.data, req.log)
+        parsed.forEach((program) => {
+            program.channel_id = channelId
+        })
 
-                parsed.forEach((program) => {
-                    program.channel_id = channelId
-                })
-
-                return res.send({ data: parsed })
-            }
-        } catch (error) {
-            req.log.error(`Error getting week's programs for channel: ${error.message}`)
-            res.status(500).send({
-                error: { message: "Error getting week's programs for channel" },
-            })
-        }
+        return res.send({ data: parsed })
     }
 }
 

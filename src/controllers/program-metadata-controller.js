@@ -17,103 +17,60 @@ class ProgramMetadataController {
     }
 
     async searchMovies(req, res) {
-        try {
-            const query = req.params.query
-            const adaptedQuery = encodeURIComponent(query)
+        const query = req.params.query
+        const adaptedQuery = encodeURIComponent(query)
 
-            var url = PROGRAM_METADATA_MOVIE_SEARCH.replace("{query}", adaptedQuery)
-            req.log.info(`Calling adapter service: ${url}`)
+        var url = PROGRAM_METADATA_MOVIE_SEARCH.replace("{query}", adaptedQuery)
+        req.log.info(`Calling adapter service: ${url}`)
 
-            const response = await axios.get(url)
+        const response = await axios.get(url)
 
-            if (response.status == 200) {
-                req.log.info("Adapter service response is OK")
+        req.log.info("Adapter service response is OK")
 
-                var parsed = this.#parseSearchMovies(response.data.data, req.log)
-                res.send({ data: parsed })
-            } else {
-                throw new Error("Invalid response from adapter service")
-            }
-        } catch (error) {
-            req.log.error(`Error searching movies: ${error.message}`)
-            res.status(500).send({
-                error: { message: "Error searching movies" },
-            })
-        }
+        var parsed = this.#parseSearchMovies(response.data.data, req.log)
+        res.send({ data: parsed })
     }
 
     async searchTvShows(req, res) {
-        try {
-            const query = req.params.query
-            const adaptedQuery = encodeURIComponent(query)
+        const query = req.params.query
+        const adaptedQuery = encodeURIComponent(query)
 
-            var url = PROGRAM_METADATA_TV_SHOW_SEARCH.replace("{query}", adaptedQuery)
-            req.log.info(`Calling adapter service: ${url}`)
+        var url = PROGRAM_METADATA_TV_SHOW_SEARCH.replace("{query}", adaptedQuery)
+        req.log.info(`Calling adapter service: ${url}`)
 
-            const response = await axios.get(url)
+        const response = await axios.get(url)
 
-            if (response.status == 200) {
-                req.log.info("Adapter service response is OK")
+        req.log.info("Adapter service response is OK")
 
-                var parsed = this.#parseSearchTvShows(response.data.data, req.log)
-                res.send({ data: parsed })
-            } else {
-                throw new Error("Invalid response from adapter service")
-            }
-        } catch (error) {
-            req.log.error(`Error searching tv-shows: ${error.message}`)
-            res.status(500).send({
-                error: { message: "Error searching tv-shows" },
-            })
-        }
+        var parsed = this.#parseSearchTvShows(response.data.data, req.log)
+        res.send({ data: parsed })
+        throw new Error("Invalid response from adapter service")
     }
 
     async getMovieDetails(req, res) {
-        try {
-            const id = req.params.id
+        const id = req.params.id
 
-            var url = PROGRAM_METADATA_MOVIE_DETAILS.replace("{id}", id)
-            req.log.info(`Calling adapter service: ${url}`)
+        var url = PROGRAM_METADATA_MOVIE_DETAILS.replace("{id}", id)
+        req.log.info(`Calling adapter service: ${url}`)
 
-            const response = await axios.get(url)
+        const response = await axios.get(url)
 
-            if (response.status == 200) {
-                req.log.info("Adapter service response is OK")
-                var parsed = this.#parseMovieDetails(response.data.data, req.log)
-                res.send({ data: parsed })
-            } else {
-                throw new Error("Invalid response from adapter service")
-            }
-        } catch (error) {
-            req.log.error(`Error getting movie details: ${error.message}`)
-            res.status(500).send({
-                error: { message: "Error getting movie details" },
-            })
-        }
+        req.log.info("Adapter service response is OK")
+        var parsed = this.#parseMovieDetails(response.data.data, req.log)
+        res.send({ data: parsed })
     }
 
     async getTvShowDetails(req, res) {
-        try {
-            const id = req.params.id
+        const id = req.params.id
 
-            var url = PROGRAM_METADATA_TV_SHOW_DETAILS.replace("{id}", id)
-            req.log.info(`Calling adapter service: ${url}`)
+        var url = PROGRAM_METADATA_TV_SHOW_DETAILS.replace("{id}", id)
+        req.log.info(`Calling adapter service: ${url}`)
 
-            const response = await axios.get(url)
+        const response = await axios.get(url)
 
-            if (response.status == 200) {
-                req.log.info("Adapter service response is OK")
-                var parsed = this.#parseTvShowDetails(response.data.data, req.log)
-                res.send({ data: parsed })
-            } else {
-                throw new Error("Invalid response from adapter service")
-            }
-        } catch (error) {
-            req.log.error(`Error getting tv-show details: ${error.message}`)
-            res.status(500).send({
-                error: { message: "Error getting tv-show details" },
-            })
-        }
+        req.log.info("Adapter service response is OK")
+        var parsed = this.#parseTvShowDetails(response.data.data, req.log)
+        res.send({ data: parsed })
     }
 
     #parseSearchMovies(data, logger) {
@@ -132,7 +89,10 @@ class ProgramMetadataController {
                         original_title: movie?.original_title,
                         description: movie?.overview,
                         release_date: movie?.release_date,
-                        poster_path: movie?.poster_path?.length > 0 ? `https://image.tmdb.org/t/p/original${movie?.poster_path}` : "",
+                        poster_path:
+                            movie?.poster_path?.length > 0
+                                ? `https://image.tmdb.org/t/p/original${movie?.poster_path}`
+                                : "",
                         original_language: movie?.original_language,
                     })
                 } catch (error) {
@@ -163,7 +123,10 @@ class ProgramMetadataController {
                         title: tvShow?.name,
                         original_title: tvShow?.original_name,
                         description: tvShow?.overview,
-                        poster_path: tvShow?.poster_path?.length > 0 ? `https://image.tmdb.org/t/p/original${tvShow?.poster_path}` : "",
+                        poster_path:
+                            tvShow?.poster_path?.length > 0
+                                ? `https://image.tmdb.org/t/p/original${tvShow?.poster_path}`
+                                : "",
                         original_language: tvShow?.original_language,
                     })
                 } catch (error) {
@@ -190,7 +153,10 @@ class ProgramMetadataController {
                 title: data?.title,
                 original_title: data?.original_title,
                 description: data?.overview,
-                poster_path: data?.poster_path?.length > 0 ? `https://image.tmdb.org/t/p/original${data?.poster_path}` : "",
+                poster_path:
+                    data?.poster_path?.length > 0
+                        ? `https://image.tmdb.org/t/p/original${data?.poster_path}`
+                        : "",
                 release_date: data?.release_date,
                 original_language: data?.original_language,
                 genres: data?.genres?.map((genre) => genre.name),
@@ -215,7 +181,10 @@ class ProgramMetadataController {
                 title: data?.name,
                 original_title: data?.original_name,
                 description: data?.overview,
-                poster_path: data?.poster_path?.length > 0 ? `https://image.tmdb.org/t/p/original${data?.poster_path}` : "",
+                poster_path:
+                    data?.poster_path?.length > 0
+                        ? `https://image.tmdb.org/t/p/original${data?.poster_path}`
+                        : "",
                 original_language: data?.original_language,
                 first_air_date: data?.first_air_date,
                 last_air_date: data?.last_air_date,
@@ -234,7 +203,10 @@ class ProgramMetadataController {
                         season_number: season?.season_number,
                         episode_count: season?.episode_count,
                         air_date: season?.air_date,
-                        poster_path: season?.poster_path?.length > 0 ? `https://image.tmdb.org/t/p/original${season?.poster_path}` : "",
+                        poster_path:
+                            season?.poster_path?.length > 0
+                                ? `https://image.tmdb.org/t/p/original${season?.poster_path}`
+                                : "",
                     }
                 }),
             }

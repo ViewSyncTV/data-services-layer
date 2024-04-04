@@ -9,22 +9,12 @@ const TV_PROGRAM_MEDIASET_CHANNEL_LIST_GET = `${ADAPTER_SERVICE_URL}/api/db/tv-p
 
 class DbController {
     async getLastTvProgramUpdate(req, res) {
-        try {
-            req.log.info(`Calling adapter service: ${TV_PROGRAM_LAST_UPDATE_GET}`)
-            const response = await axios.get(TV_PROGRAM_LAST_UPDATE_GET)
+        req.log.info(`Calling adapter service: ${TV_PROGRAM_LAST_UPDATE_GET}`)
 
-            if (response.status === 200) {
-                req.log.info("Adapter service response is OK")
-                res.send({ data: response.data.data })
-            } else {
-                throw new Error("Invalid response from adapter service")
-            }
-        } catch (error) {
-            req.log.error(`Error getting last tv program update: ${error.message}`)
-            res.status(500).send({
-                error: { message: "Error getting last tv program update" },
-            })
-        }
+        const response = await axios.get(TV_PROGRAM_LAST_UPDATE_GET)
+
+        req.log.info("Adapter service response is OK")
+        res.send({ data: response.data.data })
     }
 
     async insertTvProgram(req, res) {

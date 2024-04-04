@@ -1,6 +1,7 @@
 const express = require("express")
 const MediasetTvProgramController = require("../controllers/tv-program-controllers/mediaset-tv-program-controller")
 const RaiTvProgramController = require("../controllers/tv-program-controllers/rai-tv-program-controller")
+const { asyncHandler } = require("../middleware/error_handler")
 
 const router = express.Router()
 const mediasetTvProgramController = new MediasetTvProgramController()
@@ -11,11 +12,11 @@ router.get("/", (req, res) => {
 })
 
 const mediasetRouter = express.Router()
-mediasetRouter.get("/week/:channelId", mediasetTvProgramController.getWeekProgramsForChannel)
+mediasetRouter.get("/week/:channelId", asyncHandler(mediasetTvProgramController.getWeekProgramsForChannel))
 router.use("/mediaset", mediasetRouter)
 
 const raiRouter = express.Router()
-raiRouter.get("/week/:channelId", raiTvProgramController.getWeekProgramsForChannel)
+raiRouter.get("/week/:channelId", asyncHandler(raiTvProgramController.getWeekProgramsForChannel))
 router.use("/rai", raiRouter)
 
 module.exports = router
