@@ -62,6 +62,7 @@ class RaiTvProgramController {
                         title: event?.name,
                         description: event?.description,
                         channel_id: event?.channel,
+                        category: this.#adaptCategory(event?.dfp?.escaped_typology_name),
                         start_time: startTime.toISOString().toLocaleString("it-IT"),
                         end_time: endTime.toISOString().toLocaleString("it-IT"),
                     })
@@ -76,6 +77,24 @@ class RaiTvProgramController {
             logger.error(`Error parsing rai's programs: ${error.message}`)
             return []
         }
+    }
+
+    #adaptCategory(category) {
+        if (!category) {
+            return ""
+        }
+
+        /* eslint-disable indent */
+        switch (category) {
+            case "Film":
+                return "Film"
+            case "SerieTV":
+            case "Fiction":
+                return "TV Show"
+            default:
+                return category
+        }
+        /* eslint-enable indent */
     }
 
     async getWeekProgramsForChannel(req, res) {

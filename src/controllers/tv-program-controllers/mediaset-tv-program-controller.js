@@ -25,6 +25,9 @@ class MediasetTvProgramController {
                             description: listing?.description,
                             channel_id: listing?.program?.mediasetprogram$publishInfo?.channel,
                             channel: listing?.program?.mediasetprogram$publishInfo?.description,
+                            category: listing?.program?.tags
+                                ?.filter((tag) => tag?.scheme == "category")
+                                .map((tag) => this.#adaptCategory(tag?.title))[0],
                             start_time: new Date(listing?.startTime)
                                 .toISOString()
                                 .toLocaleString("it-IT"),
@@ -44,6 +47,24 @@ class MediasetTvProgramController {
             logger.error(`Error parsing mediaset's programs: ${error.message}`)
             return []
         }
+    }
+
+    #adaptCategory(category) {
+        if (!category) {
+            return ""
+        }
+
+        /* eslint-disable indent */
+        switch (category) {
+            case "Film":
+                return "Film"
+            case "Serie TV":
+            case "Fiction":
+                return "TV Show"
+            default:
+                return category
+        }
+        /* eslint-enable indent */
     }
 
     async getWeekProgramsForChannel(req, res) {
