@@ -1,3 +1,5 @@
+/** @namespace Logger */
+
 const pino = require("pino")
 
 const logger = pino({
@@ -10,6 +12,14 @@ const logger = pino({
     },
 })
 
+/**
+ * The middleware that handles the logging of the requests and injects the logger into the request object
+ * @function
+ * @param {Types.Request} req - The request object
+ * @param {Types.Response} res - The response object
+ * @param {Function} next - The next middleware
+ * @memberof Logger
+ */
 const pinoMiddleware = (req, res, next) => {
     const method = req.method
     const url = req.url

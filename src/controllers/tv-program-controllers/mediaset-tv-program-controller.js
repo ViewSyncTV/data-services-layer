@@ -1,8 +1,15 @@
 const axios = require("axios")
 
+// eslint-disable-next-line no-unused-vars
+const Types = require("../../types/types")
+
 const DATA_SERVICE_URL = process.env.DATA_SERVICE_URL || "http://localhost:3040"
 const MEDIASET_TV_PROGRAMS_WEEK_GET = `${DATA_SERVICE_URL}/api/tv-program/mediaset/week`
 
+/**
+ * Controller that fetches all the informations abouth the Mediaset TV programs
+ * @memberof Controllers
+ */
 class MediasetTvProgramController {
     constructor() {
         this.getWeekProgramsForChannel = this.getWeekProgramsForChannel.bind(this)
@@ -67,6 +74,14 @@ class MediasetTvProgramController {
         /* eslint-enable indent */
     }
 
+    /**
+     * Get week programs for a specific channel of the Mediaset list of channels
+     * @async
+     * @param {Types.Request} req - The request object
+     * @param {Types.Response} res - The response object
+     * @returns {Promise<Types.ApiResponse<Types.TvProgram>>} The list of programs for the channel
+     * @throws Will throw an error if the request fails
+     */
     async getWeekProgramsForChannel(req, res) {
         const channelId = req.params.channelId
 

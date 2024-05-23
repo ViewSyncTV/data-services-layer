@@ -1,5 +1,8 @@
 const axios = require("axios")
 
+// eslint-disable-next-line no-unused-vars
+const Types = require("../types/types")
+
 const ADAPTER_SERVICE_URL = process.env.ADAPTER_SERVICE_URL || "http://localhost:3040"
 
 const PROGRAM_METADATA_MOVIE_SEARCH = `${ADAPTER_SERVICE_URL}/api/program-metadata/movie/search/{query}`
@@ -8,6 +11,10 @@ const PROGRAM_METADATA_TV_SHOW_SEARCH = `${ADAPTER_SERVICE_URL}/api/program-meta
 const PROGRAM_METADATA_MOVIE_DETAILS = `${ADAPTER_SERVICE_URL}/api/program-metadata/movie/{id}`
 const PROGRAM_METADATA_TV_SHOW_DETAILS = `${ADAPTER_SERVICE_URL}/api/program-metadata/tv-show/{id}`
 
+/**
+ * Controller that handles the fetch of the program metadata using the TMDB API
+ * @memberof Controllers
+ */
 class ProgramMetadataController {
     constructor() {
         this.searchMovies = this.searchMovies.bind(this)
@@ -16,6 +23,14 @@ class ProgramMetadataController {
         this.getTvShowDetails = this.getTvShowDetails.bind(this)
     }
 
+    /**
+     * Search movie by query
+     * @async
+     * @param {Types.Request} req - The request object
+     * @param {Types.Response} res - The response object
+     * @returns {Promise<Types.ApiResponse<Types.Movie[]>>} The list of movies compatible with the query
+     * @throws Will throw an error if the request fails
+     */
     async searchMovies(req, res) {
         const query = req.params.query
         const adaptedQuery = encodeURIComponent(query)
@@ -31,6 +46,14 @@ class ProgramMetadataController {
         res.send({ data: parsed })
     }
 
+    /**
+     * Search tv show by query
+     * @async
+     * @param {Types.Request} req - The request object
+     * @param {Types.Response} res - The response object
+     * @returns {Promise<Types.ApiResponse<Types.TVShow[]>>} The list of tv shows compatible with the query
+     * @throws Will throw an error if the request fails
+     */
     async searchTvShows(req, res) {
         const query = req.params.query
         const adaptedQuery = encodeURIComponent(query)
@@ -44,9 +67,16 @@ class ProgramMetadataController {
 
         var parsed = this.#parseSearchTvShows(response.data.data, req.log)
         res.send({ data: parsed })
-        throw new Error("Invalid response from adapter service")
     }
 
+    /**
+     * Get movie details by id
+     * @async
+     * @param {Types.Request} req - The request object
+     * @param {Types.Response} res - The response object
+     * @returns {Promise<Types.ApiResponse<Types.Movie>>} The details of the movie
+     * @throws Will throw an error if the request fails
+     */
     async getMovieDetails(req, res) {
         const id = req.params.id
 
@@ -60,6 +90,14 @@ class ProgramMetadataController {
         res.send({ data: parsed })
     }
 
+    /**
+     * Get tv show details by id
+     * @async
+     * @param {Types.Request} req - The request object
+     * @param {Types.Response} res - The response object
+     * @returns {Promise<Types.ApiResponse<Types.TVShow>>} The details of the tv show
+     * @throws Will throw an error if the request fails
+     */
     async getTvShowDetails(req, res) {
         const id = req.params.id
 
@@ -73,12 +111,20 @@ class ProgramMetadataController {
         res.send({ data: parsed })
     }
 
+    /**
+     * Parse the search movies response into a list of movies
+     * @param {object} data - The data object from the response
+     * @param {Types.Logger} logger - The logger object
+     * @returns {Types.Movie[]} The list of movies
+     * @access private
+     */
     #parseSearchMovies(data, logger) {
         try {
             if (!data) {
                 throw new Error("Invalid Request, no data provided")
             }
 
+            /** @type {Types.Movie[]} */
             let movies = []
 
             for (let movie of data.results) {
@@ -108,12 +154,20 @@ class ProgramMetadataController {
         }
     }
 
+    /**
+     * Parse the search tv-shows response into a list of tv-shows
+     * @param {object} data - The data object from the response
+     * @param {Types.Logger} logger - The logger object
+     * @returns {Types.TVShow[]} The list of tv-shows
+     * @access private
+     */
     #parseSearchTvShows(data, logger) {
         try {
             if (!data) {
                 throw new Error("Invalid Request, no data provided")
             }
 
+            /** @type {Types.TVShow[]} */
             let tvShows = []
 
             for (let tvShow of data.results) {
@@ -142,6 +196,13 @@ class ProgramMetadataController {
         }
     }
 
+    /**
+     * Parse the movie details response into a movie object
+     * @param {object} data - The data object from the response
+     * @param {Types.Logger} logger - The logger object
+     * @returns {Types.Movie} The movie object
+     * @access private
+     */
     #parseMovieDetails(data, logger) {
         try {
             if (!data) {
@@ -170,6 +231,13 @@ class ProgramMetadataController {
         }
     }
 
+    /**
+     * Parse the tv-show details response into a tv-show object
+     * @param {object} data - The data object from the response
+     * @param {Types.Logger} logger - The logger object
+     * @returns {Types.TVShow} The tv-show object
+     * @access private
+     */
     #parseTvShowDetails(data, logger) {
         try {
             if (!data) {
