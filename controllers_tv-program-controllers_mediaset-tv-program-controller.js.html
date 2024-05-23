@@ -1,0 +1,235 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> controllers/tv-program-controllers/mediaset-tv-program-controller.js</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="style.css">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+             
+                <a href="index.html">
+                    <h1 class="navbar-item">ViewSyncTv - Data Service Layer</h1>
+                </a>
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                 
+                    
+                        <a
+                            class="link user-link "
+                            href="https://github.com/ViewSyncTV/data-services-layer"
+                        >
+                            Github
+                        </a>
+                    
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Namespaces</h3><ul><li><a href="Controllers.html">Controllers</a></li><li><a href="ErrorHandler.html">ErrorHandler</a></li><li><a href="Logger.html">Logger</a></li><li><a href="Types.html">Types</a></li></ul><h3>Classes</h3><ul><li><a href="Controllers.DbController.html">DbController</a></li><li><a href="Controllers.MediasetTvProgramController.html">MediasetTvProgramController</a></li><li><a href="Controllers.ProgramMetadataController.html">ProgramMetadataController</a></li><li><a href="Controllers.RaiTvProgramController.html">RaiTvProgramController</a></li></ul></div><div class="category"><h2>API</h2><h3>Namespaces</h3><ul><li><a href="API.html">API</a></li></ul><h3>Namespaces / Internal Resources</h3><ul><li><a href="API.Db.html">Db</a></li><li><a href="API.Db.TvProgram.html">TvProgram</a></li></ul><h3>Namespaces / External Resources</h3><ul><li><a href="API.ProgramMetadata.html">ProgramMetadata</a></li><li><a href="API.TvProgram.html">TvProgram</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>controllers/tv-program-controllers/mediaset-tv-program-controller.js</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const axios = require("axios")
+
+// eslint-disable-next-line no-unused-vars
+const Types = require("../../types/types")
+
+const DATA_SERVICE_URL = process.env.DATA_SERVICE_URL || "http://localhost:3040"
+const MEDIASET_TV_PROGRAMS_WEEK_GET = `${DATA_SERVICE_URL}/api/tv-program/mediaset/week`
+
+/**
+ * Controller that fetches all the informations abouth the Mediaset TV programs
+ * @memberof Controllers
+ */
+class MediasetTvProgramController {
+    constructor() {
+        this.getWeekProgramsForChannel = this.getWeekProgramsForChannel.bind(this)
+    }
+
+    #parseMediasetPrograms(data, logger) {
+        try {
+            if (!data) {
+                logger.error("Invalid Request, no data provided")
+                return []
+            }
+
+            let programs = []
+
+            for (let entry of data) {
+                for (let listing of entry.listings) {
+                    try {
+                        programs.push({
+                            title: listing.mediasetlisting$epgTitle,
+                            description: listing?.description,
+                            channel_id: listing?.program?.mediasetprogram$publishInfo?.channel,
+                            channel: listing?.program?.mediasetprogram$publishInfo?.description,
+                            category: listing?.program?.tags
+                                ?.filter((tag) => tag?.scheme == "category")
+                                .map((tag) => this.#adaptCategory(tag?.title))[0],
+                            start_time: new Date(listing?.startTime)
+                                .toISOString()
+                                .toLocaleString("it-IT"),
+                            end_time: new Date(listing?.endTime)
+                                .toISOString()
+                                .toLocaleString("it-IT"),
+                        })
+                    } catch (error) {
+                        logger.error(`Error parsing mediaset program: ${error.message}`)
+                    }
+                }
+            }
+
+            logger.info(`Parsed ${programs.length} programs`)
+            return programs
+        } catch (error) {
+            logger.error(`Error parsing mediaset's programs: ${error.message}`)
+            return []
+        }
+    }
+
+    #adaptCategory(category) {
+        if (!category) {
+            return ""
+        }
+
+        /* eslint-disable indent */
+        switch (category) {
+            case "Film":
+                return "Film"
+            case "Serie TV":
+            case "Fiction":
+                return "TV Show"
+            default:
+                return category
+        }
+        /* eslint-enable indent */
+    }
+
+    /**
+     * Get week programs for a specific channel of the Mediaset list of channels
+     * @async
+     * @param {Types.Request} req - The request object
+     * @param {Types.Response} res - The response object
+     * @returns {Promise&lt;Types.ApiResponse&lt;Types.TvProgram>>} The list of programs for the channel
+     * @throws Will throw an error if the request fails
+     */
+    async getWeekProgramsForChannel(req, res) {
+        const channelId = req.params.channelId
+
+        const url = `${MEDIASET_TV_PROGRAMS_WEEK_GET}/${channelId}`
+        req.log.info(`Calling data service: ${url}`)
+
+        const response = await axios.get(url)
+
+        req.log.info("Data service response is OK")
+
+        const parsed = this.#parseMediasetPrograms(response.data.data, req.log)
+
+        parsed.forEach((program) => {
+            program.channel_id = channelId
+        })
+
+        return res.send({ data: parsed })
+    }
+}
+
+module.exports = MediasetTvProgramController
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.3</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>

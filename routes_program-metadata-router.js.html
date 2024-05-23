@@ -1,0 +1,241 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> routes/program-metadata-router.js</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="style.css">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+            
+             
+                <a href="index.html">
+                    <h1 class="navbar-item">ViewSyncTv - Data Service Layer</h1>
+                </a>
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    Documentation
+                </a>
+                
+                 
+                    
+                        <a
+                            class="link user-link "
+                            href="https://github.com/ViewSyncTV/data-services-layer"
+                        >
+                            Github
+                        </a>
+                    
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Namespaces</h3><ul><li><a href="Controllers.html">Controllers</a></li><li><a href="ErrorHandler.html">ErrorHandler</a></li><li><a href="Logger.html">Logger</a></li><li><a href="Types.html">Types</a></li></ul><h3>Classes</h3><ul><li><a href="Controllers.DbController.html">DbController</a></li><li><a href="Controllers.MediasetTvProgramController.html">MediasetTvProgramController</a></li><li><a href="Controllers.ProgramMetadataController.html">ProgramMetadataController</a></li><li><a href="Controllers.RaiTvProgramController.html">RaiTvProgramController</a></li></ul></div><div class="category"><h2>API</h2><h3>Namespaces</h3><ul><li><a href="API.html">API</a></li></ul><h3>Namespaces / Internal Resources</h3><ul><li><a href="API.Db.html">Db</a></li><li><a href="API.Db.TvProgram.html">TvProgram</a></li></ul><h3>Namespaces / External Resources</h3><ul><li><a href="API.ProgramMetadata.html">ProgramMetadata</a></li><li><a href="API.TvProgram.html">TvProgram</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>routes/program-metadata-router.js</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * This nampespace defines the routes for accessing the data from the Movie and TvShow APIs
+ * @namespace API.ProgramMetadata
+ * @category API
+ * @subcategory External Resources
+ * @requires express
+ */
+
+const express = require("express")
+const ProgramMetadataController = require("../controllers/program-metadata-controller")
+const { asyncHandler } = require("../middleware/error_handler")
+// eslint-disable-next-line no-unused-vars
+const API = require("./router")
+
+/**
+ * Base route of the Metadata API
+ * @name Root
+ * @route {GET} /api/program-metadata
+ * @memberof API.ProgramMetadata
+ */
+const router = express.Router()
+const programMetadataController = new ProgramMetadataController()
+
+router.get("/", (req, res) => {
+    res.send("This is the program metadata API endpoint!")
+})
+
+/**
+ * Search for movies given a query. &lt;br>
+ * The data is retrieved from the Adapter Layer and then parsed into the Movie object
+ * @name MovieSearch
+ * @route {GET} /api/program-metadata/movie/search/:query
+ * @routeparam {string} :query - The query to search for
+ * @memberof API.ProgramMetadata
+ * @example
+ * // Example of request
+ * GET /api/program-metadata/movie/search/joker
+ *
+ * // Example of response
+ * {
+ *   "data": [
+ *      {"id":475557,"title":"Joker","original_title":"Joker","description":"Arthur Fleck vive con l'anziana madre in un palazzone fatiscente e sbarca il lunario facendo pubblicità per la strada travestito da clown, in attesa di avere il giusto materiale per realizzare il desiderio di fare il comico. La sua vita, però, è una tragedia: ignorato, calpestato, bullizzato, preso in giro da da chiunque, ha sviluppato un tic nervoso che lo fa ridere a sproposito incontrollabilmente, rendendolo inquietante e allontanando ulteriormente da lui ogni possibile relazione sociale. Ma un giorno Arthur non ce la fa più e reagisce violentemente, pistola alla mano. Mentre la polizia di Gotham City dà la caccia al clown killer, la popolazione lo elegge a eroe metropolitano, simbolo della rivolta degli oppressi contro l'arroganza dei ricchi.","release_date":"2019-10-01","poster_path":"https://image.tmdb.org/t/p/original/y1AthYH1r2j4N4cYn2HdrEGgrnJ.jpg","original_language":"en"},
+ *      {"id":146486,"title":"Joker","original_title":"Joker","description":"Nicke loves practical jokes. When his best friend Pelle is getting married, Nicke is hosting the bachelor party. It will start with the kidnapping of Pelle. Everything goes wrong when Pelle is kidnapped for real by a terrorist group.","release_date":"1991-11-01","poster_path":"https://image.tmdb.org/t/p/original/rY8eu4yQTwpZgz8BEVKfGIh8TUG.jpg","original_language":"sv"}
+ *      ...
+ *   ],
+ * }
+ */
+router.get("/movie/search/:query", asyncHandler(programMetadataController.searchMovies))
+
+/**
+ * Search for tv-shows given a query. &lt;br>
+ * The data is retrieved from the Adapter Layer and then parsed into the TvShow object
+ * @name TvShowSearch
+ * @route {GET} /api/program-metadata/tv-show/search/:query
+ * @routeparam {string} :query - The query to search for
+ * @memberof API.ProgramMetadata
+ * @example
+ * // Example of request
+ * GET /api/program-metadata/tv-show/search/breaking+bad
+ *
+ * // Example of response
+ * {
+ *   "data": [
+ *      {"id":1396,"title":"Breaking Bad","original_title":"Breaking Bad","description":"Un insegnante di chimica con un cancro allo stadio terminale comincia a produrre e spacciare metanfetamina con un suo ex studente per assicurare un futuro alla famiglia.","poster_path":"https://image.tmdb.org/t/p/original/ztkUQFLlC19CCMYHW9o1zWhJRNq.jpg","original_language":"en"},
+ *      ...
+ *    ],
+ * }
+ */
+router.get("/tv-show/search/:query", asyncHandler(programMetadataController.searchTvShows))
+
+/**
+ * Get the details of a movie given its id (the id is the one from the IMDB API). &lt;br>
+ * The data is retrieved from the Adapter Layer and then parsed into the Movie object
+ * @name MovieDetails
+ * @route {GET} /api/program-metadata/movie/:id
+ * @routeparam {string} :id - The id of the movie
+ * @memberof API.ProgramMetadata
+ * @example
+ * // Example of request
+ * GET /api/program-metadata/movie/123
+ *
+ * // Example of response
+ * {
+ *   "data": {
+ *      "id":123,"title":"Il Signore degli Anelli","original_title":"The Lord of the Rings","description":"Ambiziosa versione in animazione della saga (1954-55) di John Ronald Reuel Tolkien. Giovane hobbit della Terra di Mezzo deve gettare nel fuoco della montagna l'anello malefico del Signore delle Tenebre. Mille difficoltà lo attendono.","poster_path":"https://image.tmdb.org/t/p/original/w4YJrNjQfMEx2oal7Taskg6oa93.jpg","release_date":"1978-11-15","original_language":"en","genres":["Avventura","Animazione","Fantasy"],"vote_average":6.6
+ *   }
+ * }
+ */
+router.get("/movie/:id", asyncHandler(programMetadataController.getMovieDetails))
+
+/**
+ * Get the details of a tv-show given its id (the id is the one from the TMDB API). &lt;br>
+ * The data is retrieved from the Adapter Layer and then parsed into the TvShow object
+ * @name TvShowDetails
+ * @route {GET} /api/program-metadata/tv-show/:id
+ * @routeparam {string} :id - The id of the tv-show
+ * @memberof API.ProgramMetadata
+ * @example
+ * // Example of request
+ * GET /api/program-metadata/tv-show/123
+ *
+ * // Example of response
+ * {
+ *   "data": {
+ *      "id":123,"title":"Starting Over","original_title":"Starting Over","description":"","poster_path":"https://image.tmdb.org/t/p/original/dfoTgMdVKF08Sqp4AeLlMcLaVV7.jpg","original_language":"en","first_air_date":"2003-09-09","last_air_date":"2004-11-05","number_of_episodes":235,"number_of_seasons":2,"genres":[],"in_production":false,"languages":[],"origin_country":["US"],"vote_average":8.5,"seasons":[{"id":358,"name":"Stagione 1","overview":"","season_number":1,"episode_count":195,"air_date":"2003-09-08","poster_path":""},{"id":359,"name":"Stagione 2","overview":"","season_number":2,"episode_count":40,"air_date":"2004-09-13","poster_path":""
+ *   }
+ * }
+ */
+router.get("/tv-show/:id", asyncHandler(programMetadataController.getTvShowDetails))
+
+module.exports = router
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.3</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+
+</body>
+</html>

@@ -1,3 +1,0 @@
-/** @namespace Controllers */
-
-module.exports = {}
