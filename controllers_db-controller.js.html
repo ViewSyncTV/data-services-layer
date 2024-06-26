@@ -323,7 +323,7 @@ class DbController {
         const url = FAVORITE_URL
         req.log.info(`Calling adapter service: ${url}`)
 
-        const response = await axios.delete(url, req.body)
+        const response = await axios.delete(url, {data: req.body})
 
         req.log.info("Adapter service response is OK")
         res.send(response.data)
