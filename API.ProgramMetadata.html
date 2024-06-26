@@ -301,6 +301,122 @@ GET /api/program-metadata/movie/123
             
                 <div class="member">
 
+<h4 class="name" id="MovieRecommendations">
+    <a class="href-link" href="#MovieRecommendations">#</a>
+    
+        
+            <span class='tag'>route</span>
+        
+    
+    <span class="code-name">
+        MovieRecommendations
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    <h5>Route:</h5>
+                            <table class="params">
+                            <thead><tr><th>Method</th><th class="last">Path</th></tr></thead>
+                            <tr>
+                            <td class="type">GET</td>
+                            <td class="name last">/api/program-metadata/movie/recommendations/:id</td>
+                            </tr>
+                            </table>
+                            <p>Get the recommendations of a movie given its id (the id is the one from the TMDB API). <br>
+The data is retrieved from the Adapter Layer and then parsed into the Movie object</p>
+                            <h5>Route Parameters:</h5>
+          <table class="params">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Type</th>
+                
+                
+                <th class="last">Description</th>
+              </tr>
+            </thead>
+            <tr>
+            <td class="name">:id</td>
+            <td class="type">string</td>
+            
+            
+            <td class="description last">The id of the movie</td>
+          </tr>
+          </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="routes_program-metadata-router.js.html" class="button">View Source</a>
+            <span>
+                <a href="routes_program-metadata-router.js.html">routes/program-metadata-router.js</a>, <a href="routes_program-metadata-router.js.html#line134">line 134</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+    <h5>Example</h5>
+    
+    
+        <pre class="prettyprint"><code>// Example of request
+GET /api/program-metadata/movie/recommendations/123
+
+// Example of response
+{
+  "data": [{
+    "id":123,"title":"Il Signore degli Anelli","original_title":"The Lord of the Rings","description":"Ambiziosa versione in animazione della saga (1954-55) di John Ronald Reuel Tolkien. Giovane hobbit della Terra di Mezzo deve gettare nel fuoco della montagna l'anello malefico del Signore delle Tenebre. Mille difficoltà lo attendono.","poster_path":"https://image.tmdb.org/t/p/original/w4YJrNjQfMEx2oal7Taskg6oa93.jpg","release_date":"1978-11-15","original_language":"en","genres":["Avventura","Animazione","Fantasy"],"vote_average":6.6
+  }]
+}</code></pre>
+    
+
+
+</div>
+            
+                <div class="member">
+
 <h4 class="name" id="MovieSearch">
     <a class="href-link" href="#MovieSearch">#</a>
     
@@ -486,7 +602,7 @@ GET /api/program-metadata/movie/search/joker
         <p class="tag-source">
             <a href="routes_program-metadata-router.js.html" class="button">View Source</a>
             <span>
-                <a href="routes_program-metadata-router.js.html">routes/program-metadata-router.js</a>, <a href="routes_program-metadata-router.js.html#line15">line 15</a>
+                <a href="routes_program-metadata-router.js.html">routes/program-metadata-router.js</a>, <a href="routes_program-metadata-router.js.html#line18">line 18</a>
             </span>
         </p>
     
@@ -608,6 +724,122 @@ GET /api/program-metadata/tv-show/123
   "data": {
      "id":123,"title":"Starting Over","original_title":"Starting Over","description":"","poster_path":"https://image.tmdb.org/t/p/original/dfoTgMdVKF08Sqp4AeLlMcLaVV7.jpg","original_language":"en","first_air_date":"2003-09-09","last_air_date":"2004-11-05","number_of_episodes":235,"number_of_seasons":2,"genres":[],"in_production":false,"languages":[],"origin_country":["US"],"vote_average":8.5,"seasons":[{"id":358,"name":"Stagione 1","overview":"","season_number":1,"episode_count":195,"air_date":"2003-09-08","poster_path":""},{"id":359,"name":"Stagione 2","overview":"","season_number":2,"episode_count":40,"air_date":"2004-09-13","poster_path":""
   }
+}</code></pre>
+    
+
+
+</div>
+            
+                <div class="member">
+
+<h4 class="name" id="TvShowRecommendations">
+    <a class="href-link" href="#TvShowRecommendations">#</a>
+    
+        
+            <span class='tag'>route</span>
+        
+    
+    <span class="code-name">
+        TvShowRecommendations
+    </span>
+    
+</h4>
+
+
+
+
+<div class="description">
+    <h5>Route:</h5>
+                            <table class="params">
+                            <thead><tr><th>Method</th><th class="last">Path</th></tr></thead>
+                            <tr>
+                            <td class="type">GET</td>
+                            <td class="name last">/api/program-metadata/tv-show/recommendations/:id</td>
+                            </tr>
+                            </table>
+                            <p>Get the recommendations of a tv-show given its id (the id is the one from the TMDB API). <br>
+The data is retrieved from the Adapter Layer and then parsed into the TvShow object</p>
+                            <h5>Route Parameters:</h5>
+          <table class="params">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Type</th>
+                
+                
+                <th class="last">Description</th>
+              </tr>
+            </thead>
+            <tr>
+            <td class="name">:id</td>
+            <td class="type">string</td>
+            
+            
+            <td class="description last">The id of the tv-show</td>
+          </tr>
+          </table>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="routes_program-metadata-router.js.html" class="button">View Source</a>
+            <span>
+                <a href="routes_program-metadata-router.js.html">routes/program-metadata-router.js</a>, <a href="routes_program-metadata-router.js.html#line111">line 111</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+    <h5>Example</h5>
+    
+    
+        <pre class="prettyprint"><code>// Example of request
+GET /api/program-metadata/tv-show/recommendations/123
+
+// Example of response
+{
+  "data": [{
+     "id":123,"title":"Starting Over","original_title":"Starting Over","description":"","poster_path":"https://image.tmdb.org/t/p/original/dfoTgMdVKF08Sqp4AeLlMcLaVV7.jpg","original_language":"en","first_air_date":"2003-09-09","last_air_date":"2004-11-05","number_of_episodes":235,"number_of_seasons":2,"genres":[],"in_production":false,"languages":[],"origin_country":["US"],"vote_average":8.5,"seasons":[{"id":358,"name":"Stagione 1","overview":"","season_number":1,"episode_count":195,"air_date":"2003-09-08","poster_path":""},{"id":359,"name":"Stagione 2","overview":"","season_number":2,"episode_count":40,"air_date":"2004-09-13","poster_path":""
+  }]
 }</code></pre>
     
 
