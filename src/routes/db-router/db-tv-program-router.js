@@ -155,7 +155,8 @@ router.get("/mediaset-channel-list", asyncHandler(dbController.getMediasetChanne
  * POST /api/tv-program/favorite
  * {
  *     "user_email": "test@email.com",
- *     "movie_id": "12345"  // or tvshow_id
+ *     "movie_id": "12345",  // or tvshow_id
+ *     "title": "Title"
  * }
  */
 router.post("/favorite", asyncHandler(dbController.addFavorite))
@@ -188,8 +189,8 @@ router.delete("/favorite", asyncHandler(dbController.removeFavorite))
  * // Example of response
  * {
  *     "data": [
- *          {"movie_id": 8384}
- *          {"tvshow_id": 88829},
+ *          {"movie_id": 8384, "title": "title1"}
+ *          {"tvshow_id": 88829, "title": "title2"},
  *     ]
  * }
  */
