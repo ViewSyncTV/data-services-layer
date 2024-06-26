@@ -11,8 +11,11 @@ const PROGRAM_METADATA_TV_SHOW_SEARCH = `${ADAPTER_SERVICE_URL}/api/program-meta
 const PROGRAM_METADATA_MOVIE_DETAILS = `${ADAPTER_SERVICE_URL}/api/program-metadata/movie/{id}`
 const PROGRAM_METADATA_TV_SHOW_DETAILS = `${ADAPTER_SERVICE_URL}/api/program-metadata/tv-show/{id}`
 
+const PROGRAM_METADATA_MOVIE_RECOMMENDATIONS = `${ADAPTER_SERVICE_URL}/api/program-metadata/movie/recommendations/{id}`
+const PROGRAM_METADATA_TV_SHOW_RECOMMENDATIONS = `${ADAPTER_SERVICE_URL}/api/program-metadata/tv-show/recommendations/{id}`
+
 /**
- * Controller that handles the fetch of the program metadata using the TMDB API
+ * Controller that handles the fetch of the program metadata
  * @memberof Controllers
  */
 class ProgramMetadataController {
@@ -21,6 +24,8 @@ class ProgramMetadataController {
         this.searchTvShows = this.searchTvShows.bind(this)
         this.getMovieDetails = this.getMovieDetails.bind(this)
         this.getTvShowDetails = this.getTvShowDetails.bind(this)
+        this.getTvShowRecommendations = this.getTvShowRecommendations.bind(this)
+        this.getMovieRecommendations = this.getMovieRecommendations.bind(this)
     }
 
     /**
@@ -108,6 +113,48 @@ class ProgramMetadataController {
 
         req.log.info("Adapter service response is OK")
         var parsed = this.#parseTvShowDetails(response.data.data, req.log)
+        res.send({ data: parsed })
+    }
+
+    /**
+     * Get tv show recommendations by id
+     * @async
+     * @param {Types.Request} req - The request object
+     * @param {Types.Response} res - The response object
+     * @returns {Promise<Types.ApiResponse<Types.TVShow[]>>} The list of tv shows recommended
+     * @throws Will throw an error if the request fails
+     */
+    async getTvShowRecommendations(req, res) {
+        const id = req.params.id
+
+        var url = PROGRAM_METADATA_TV_SHOW_RECOMMENDATIONS.replace("{id}", id)
+        req.log.info(`Calling adapter service: ${url}`)
+
+        const response = await axios.get(url)
+
+        req.log.info("Adapter service response is OK")
+        var parsed = this.#parseSearchTvShows(response.data.data, req.log)
+        res.send({ data: parsed })
+    }
+
+    /**
+     * Get movie recommendations by id
+     * @async
+     * @param {Types.Request} req - The request object
+     * @param {Types.Response} res - The response object
+     * @returns {Promise<Types.ApiResponse<Types.Movie[]>>} The list of movies recommended
+     * @throws Will throw an error if the request fails
+     */
+    async getMovieRecommendations(req, res) {
+        const id = req.params.id
+
+        var url = PROGRAM_METADATA_MOVIE_RECOMMENDATIONS.replace("{id}", id)
+        req.log.info(`Calling adapter service: ${url}`)
+
+        const response = await axios.get(url)
+
+        req.log.info("Adapter service response is OK")
+        var parsed = this.#parseSearchMovies(response.data.data, req.log)
         res.send({ data: parsed })
     }
 
