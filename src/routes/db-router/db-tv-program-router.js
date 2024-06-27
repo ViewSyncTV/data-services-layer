@@ -196,4 +196,54 @@ router.delete("/favorite", asyncHandler(dbController.removeFavorite))
  */
 router.get("/favorites/:userMail", asyncHandler(dbController.getFavorites))
 
+/**
+ * Add a Tv program to the reminder list of the user.
+ * @name ReminderAdd
+ * @route {POST} /api/tv-program/reminder
+ * @memberof API.TvProgram
+ * @example
+ * // Example of request
+ * POST /api/tv-program/reminder
+ * {
+ *     "user_email": "test@email.com",
+ *     "tvprogram_id": "12345"
+ * }
+ */
+router.post("/reminder", asyncHandler(dbController.addReminder))
+
+/**
+ * Remove a Tv program from the reminder list of the user.
+ * @name ReminderRemove
+ * @route {DELETE} /api/tv-program/reminder
+ * @memberof API.TvProgram
+ * @example
+ * // Example of request
+ * DELETE /api/tv-program/reminder
+ * {
+ *    "user_email": "test@email.com",
+ *    "tvprogram_id": "12345"
+ * }
+ */
+router.delete("/reminder", asyncHandler(dbController.removeReminder))
+
+/**
+ * Get the list of reminder Tv programs of the user.
+ * @name ReminderGet
+ * @route {GET} /api/tv-program/reminders
+ * @routeparam {string} :userMail - The email of the user
+ * @memberof API.TvProgram
+ * @example
+ * // Example of request
+ * GET /api/tv-program/reminders/test%40mail.com%0A
+ *
+ * // Example of response
+ * {
+ *     "data": [
+ *          {"tvprogram_id": 8384},
+ *          {"tvprogram_id": 88829},
+ *     ]
+ * }
+ */
+router.get("/reminders/:userMail", asyncHandler(dbController.getReminders))
+
 module.exports = router

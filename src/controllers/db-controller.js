@@ -12,6 +12,8 @@ const TV_PROGRAM_RAI_CHANNEL_LIST_GET = `${ADAPTER_SERVICE_URL}/api/db/tv-progra
 const TV_PROGRAM_MEDIASET_CHANNEL_LIST_GET = `${ADAPTER_SERVICE_URL}/api/db/tv-program/mediaset-channel-list`
 const FAVORITE_GET_URL = `${ADAPTER_SERVICE_URL}/api/db/tv-program/favorites/:userMail`
 const FAVORITE_URL = `${ADAPTER_SERVICE_URL}/api/db/tv-program/favorite`
+const REMINDER_GET_URL = `${ADAPTER_SERVICE_URL}/api/db/tv-program/reminders/:userMail`
+const REMINDER_URL = `${ADAPTER_SERVICE_URL}/api/db/tv-program/reminder`
 
 /**
  * Controller that handles the database operations
@@ -221,6 +223,61 @@ class DbController {
      */
     async removeFavorite(req, res) {
         const url = FAVORITE_URL
+        req.log.info(`Calling adapter service: ${url}`)
+
+        const response = await axios.delete(url, {data: req.body})
+
+        req.log.info("Adapter service response is OK")
+        res.send(response.data)
+    }
+
+    /**
+     * Get the list of reminder Tv programs for the user.
+     * @async
+     * @param {Types.Request} req - The request object
+     * @param {Types.Response} res - The response object
+     * @returns {Promise<Types.ApiResponse<Types.Reminder[]>>} The list of reminder Tv programs
+     * @throws Will throw an error if the request fails
+     */
+    async getReminders(req, res) {
+        const userEmail = req.params.userMail
+        const url = REMINDER_GET_URL.replace(":userMail", userEmail)
+
+        req.log.info(`Calling adapter service: ${url}`)
+        const response = await axios.get(url)
+
+        req.log.info("Adapter service response is OK")
+        res.send({ data: response.data.data })
+    }
+
+    /**
+     * Add a Tv program to the user's reminders.
+     * @async
+     * @param {Types.Request} req - The request object
+     * @param {Types.Response} res - The response object
+     * @returns {Promise<Types.ApiResponse>} The response
+     * @throws Will throw an error if the request fails
+     */
+    async addReminder(req, res) {
+        const url = REMINDER_URL
+        req.log.info(`Calling adapter service: ${url}`)
+
+        const response = await axios.post(url, req.body)
+
+        req.log.info("Adapter service response is OK")
+        res.send(response.data)
+    }
+
+    /**
+     * Remove a Tv program from the user's reminders.
+     * @async
+     * @param {Types.Request} req - The request object
+     * @param {Types.Response} res - The response object
+     * @returns {Promise<Types.ApiResponse>} The response
+     * @throws Will throw an error if the request fails
+     */
+    async removeReminder(req, res) {
+        const url = REMINDER_URL
         req.log.info(`Calling adapter service: ${url}`)
 
         const response = await axios.delete(url, {data: req.body})
